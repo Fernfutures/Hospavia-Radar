@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HospavIA Radar · vista previa</title>
+<meta name="description" content="Cada lunes, las iniciativas que están transformando la salud en América Latina. De la infraestructura a la inteligencia.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   Editorial treatment in the HospavIA palette.
+   Caslon carries the reading; the sans is reserved for chrome and
+   departments. Blue, teal and amber keep their agenda meanings.
+   ===================================================================== */
+:root {
+  --tinta:   #16224a;
+  --suave:   #4d5875;
+  --tenue:   #8a8f9e;
+  --papel:   #fdfcfa;
+  --linea:   #ddd9d0;
+  --linea-f: #b9b4a8;
+
+  --azul:  #2c5fd9;
+  --azul-o:#1e4bb8;
+  --teal:  #23b098;
+  --teal-o:#17806e;
+  --ambar: #e9a93d;
+  --ambar-o:#b8781a;
+
+  --display: "Libre Caslon Display", "Iowan Old Style", Georgia, serif;
+  --texto:   "Libre Caslon Text", Georgia, "Times New Roman", serif;
+  --sans:    "Inter", ui-sans-serif, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tinta: #ece9e2; --suave: #a8b0c2; --tenue: #7c8395;
+    --papel: #12161f; --linea: #2b3140; --linea-f: #444b5c;
+    --azul: #7ba3f5; --azul-o: #a8c4ff;
+    --teal: #4fd0b6; --teal-o: #7de3cd;
+    --ambar: #e5b45c; --ambar-o: #f0cb8b;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--texto);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.marco { max-width: 1240px; margin: 0 auto; padding: 0 2.5rem; }
+.columna { max-width: 46rem; }
+a { color: inherit; }
+
+/* Applesque: every state change eases; nothing snaps. */
+a, .dep, .pie-nota a, .rel h3 {
+  transition: color .3s cubic-bezier(.28,.11,.32,1),
+              border-color .3s cubic-bezier(.28,.11,.32,1),
+              opacity .3s cubic-bezier(.28,.11,.32,1);
+}
+
+/* Sections settle into place as they enter, once, then stay put. */
+.revelar { opacity: 0; transform: translateY(14px); }
+.revelar.dentro {
+  opacity: 1; transform: none;
+  transition: opacity .7s cubic-bezier(.28,.11,.32,1),
+              transform .7s cubic-bezier(.28,.11,.32,1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .revelar, .revelar.dentro { opacity: 1; transform: none; transition: none; }
+  a, .dep { transition: none; }
+}
+:focus-visible { outline: 2px solid var(--azul); outline-offset: 3px; }
+
+
+/* --- cabecera de revista --------------------------------------------- */
+.cabecera { padding: 2.5rem 0 0; }
+
+.linea-emisor {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 1rem; flex-wrap: wrap;
+  font-family: var(--sans);
+  font-size: 0.6875rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--tenue);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--linea-f);
+}
+
+.nombre {
+  font-family: var(--display);
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  /* 0.95 clipped the box tighter than the glyphs, so the descender on the
+     "p" collided with RADAR below. Needs room for the descender. */
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  color: var(--azul-o);
+  margin: 1.75rem 0 0;
+  text-align: center;
+}
+
+/* IA carries the brand's meaning, so it keeps the teal. The word stays
+   unbroken because nothing else shares the line — "Radar" sits below. */
+.nombre .ia { color: var(--teal-o); }
+
+.publicacion {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--teal-o);
+  text-align: center;
+  margin: 0.75rem 0 1.5rem;
+}
+
+.subnombre {
+  font-family: var(--texto);
+  font-size: 1.0625rem;
+  letter-spacing: 0.01em;
+  color: var(--suave);
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
+.regla-doble { border-top: 3px solid var(--tinta); border-bottom: 1px solid var(--tinta); height: 4px; }
+
+
+/* --- departamentos (la navegación) ----------------------------------- */
+.departamentos {
+  display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;
+  padding: 1.125rem 0;
+  border-bottom: 1px solid var(--linea-f);
+  margin-bottom: 3rem;
+}
+
+.dep {
+  font-family: var(--texto);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: var(--suave);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.dep:hover { color: var(--tinta); }
+.dep.activo[data-ag="todas"]   { color: var(--tinta);   border-bottom-color: var(--linea-f); }
+.dep.activo[data-ag="infra"]   { color: var(--azul-o);  border-bottom-color: var(--azul); }
+.dep.activo[data-ag="digital"] { color: var(--teal-o);  border-bottom-color: var(--teal); }
+.dep.activo[data-ag="clinica"] { color: var(--ambar-o); border-bottom-color: var(--ambar); }
+
+
+/* --- el programa, dentro del bloque de posicionamiento --------------- */
+.programa { margin: 0 auto 2.5rem; max-width: 48rem; padding-top: 2.25rem; border-top: 1px solid var(--linea); }
+
+
+.quienes-unused {
+  font-size: 1.1875rem;
+  line-height: 1.65;
+  color: var(--tinta);
+  margin: 0 0 1.25rem;
+}
+
+.agendas-intro {
+  font-family: var(--sans); font-size: 0.6875rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--tenue);
+  margin: 0 0 0.75rem;
+}
+
+/* Three agendas as three columns, each under its own colour rule. */
+.agendas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  text-align: left;
+}
+
+.agendas li { padding-top: .75rem; border-top: 2px solid; }
+.agendas li b {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.125rem;
+  font-weight: 400;
+  margin: 0 0 0.3rem;
+}
+.agendas li span { font-size: 0.875rem; line-height: 1.55; color: var(--suave); }
+
+.agendas .ag-i { border-color: var(--azul); }
+.agendas .ag-i b { color: var(--azul-o); }
+.agendas .ag-d { border-color: var(--teal); }
+.agendas .ag-d b { color: var(--teal-o); }
+.agendas .ag-c { border-color: var(--ambar); }
+.agendas .ag-c b { color: var(--ambar-o); }
+
+.agendas-cierre {
+  font-family: var(--texto);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--suave);
+  margin: 0 0 1.75rem;
+  max-width: none;
+}
+
+@media (max-width: 44rem) {
+  .agendas { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+
+/* the three agendas keep their colours wherever they are named */
+.ag-i { color: var(--azul-o); font-weight: 600; }
+.ag-d { color: var(--teal-o); font-weight: 600; }
+.ag-c { color: var(--ambar-o); font-weight: 600; }
+
+.cuenta {
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--tenue);
+  margin: 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--linea);
+}
+.cuenta b { color: var(--azul-o); font-weight: 600; }
+
+
+/* --- diferenciadores: why THIS event ---------------------------------- */
+.distinto { border-top: 1px solid var(--linea-f); border-bottom: 1px solid var(--linea);
+            padding: 2.75rem 0 2.5rem; margin: 0 0 4.5rem; }
+.distinto > .label { color: var(--teal-o); margin: 0 0 0.875rem; text-align: center; }
+.distinto h2 { font-family: var(--display); font-size: clamp(1.75rem, 3.5vw, 2.375rem);
+               line-height: 1.15; text-align: center; margin: 0 auto 0.875rem; max-width: 24ch; text-wrap: balance; }
+.distinto .sub { font-size: 1.0625rem; line-height: 1.65; color: var(--suave);
+                 text-align: center; margin: 0 auto 2.5rem; max-width: 56ch; }
+
+.pilares { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; margin: 0 0 2.5rem; }
+.pilar b { display: block; font-family: var(--display); font-size: 1.25rem; font-weight: 400;
+           color: var(--tinta); margin: 0 0 0.4rem; }
+.pilar span { font-size: 0.9375rem; line-height: 1.6; color: var(--suave); }
+
+.cifras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+          padding-top: 2rem; border-top: 1px solid var(--linea); }
+.cifras div { text-align: center; }
+.cifras .n { font-family: var(--display); font-size: 2.25rem; line-height: 1;
+             color: var(--azul-o); margin: 0 0 0.4rem; font-variant-numeric: tabular-nums; }
+.cifras .l { font-size: 0.8125rem; line-height: 1.4; color: var(--tenue); margin: 0; }
+
+/* --- POSICIONAMIENTO. First thing after the masthead.
+   Short lines, big type, no paragraphs to wade through. The demand
+   claim is the proposition; everything else on the page supports it. */
+/* The positioning is one panel, not four loose blocks. The box tells the
+   eye where the pitch starts and where the news begins. */
+.posicion {
+  background: var(--azul-bg);
+  border: 1px solid rgba(44,95,217,.22);
+  padding: 2.5rem 2.75rem 2.25rem;
+  margin: 0 0 3rem;
+}
+
+/* 1. hook — centred, the only thing at this size */
+.pos-hook { text-align: center; max-width: 42rem; margin: 0 auto 2.25rem; }
+
+/* 2. differentiation — left aligned, so it reads as argument not slogan */
+.pos-dif { padding-top: 2.25rem; border-top: 1px solid rgba(44,95,217,.18); margin: 0 0 2.25rem; }
+/* Heading left, supporting prose right. Fills the 1240px measure instead
+   of leaving a narrow column stranded against the left edge. */
+.cab-doble { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem;
+             align-items: start; margin: 0 0 1.75rem; }
+
+/* These two headings must match. .dif-h is an <h3> and .tema is a <p>,
+   so leaving font-weight unset made one bold and the other not. Both are
+   declared explicitly, and both use Caslon Text because Caslon Display
+   has no 700 and the browser would fake it. */
+.dif-h, .tema {
+  font-family: var(--texto);
+  font-weight: 700;
+  font-size: clamp(1.125rem, 2.1vw, 1.625rem);
+  line-height: 1.2;
+  color: var(--tinta);
+  margin: 0 0 .625rem;
+  max-width: none;
+  white-space: nowrap;
+}
+
+/* nowrap would overflow a narrow screen, so let both wrap again there */
+@media (max-width: 60rem) {
+  .dif-h, .tema { white-space: normal; font-size: 1.3125rem; }
+}
+.dif-cierre { font-size: 1rem; line-height: 1.6; color: var(--suave); margin: 0 0 1.75rem; max-width: none; }
+
+/* 3. programme — left aligned, continues the argument */
+.programa { padding-top: 2.25rem; border-top: 1px solid rgba(44,95,217,.18); margin: 0 0 2.25rem; max-width: none; }
+
+/* 4. close — centred, mirrors the hook */
+.pos-cierre { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(44,95,217,.18); }
+.pos-hook .label { color: var(--teal-o); margin: 0 0 1.25rem; }
+
+.reclamo {
+  font-family: var(--display);
+  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--azul-o);
+  margin: 0 auto 1.25rem;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.reclamo-sub {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--suave);
+  margin: 0 auto;
+  max-width: 52ch;
+}
+.reclamo-sub b { color: var(--tinta); font-weight: 600; }
+
+/* no somos / somos — the differentiator, stated as a comparison */
+/* THE differentiation. Slide 3's three pillars, each carrying the number
+   that proves it. Nothing else in this block outranks them. */
+.pilares3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+            text-align: left; margin: 0 0 1.5rem; }
+.pilar3 { padding-top: .875rem; border-top: 3px solid; }
+.p-nom { font-family: var(--display); font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+         line-height: 1.15; margin: 0 0 0.625rem; }
+.p-sub { font-size: 1rem; line-height: 1.5; color: var(--tinta); margin: 0 0 .75rem; }
+.p-prueba { font-family: var(--sans); font-size: 0.8125rem; line-height: 1.45;
+            color: var(--tenue); margin: 0; padding-top: 0.625rem; border-top: 1px solid rgba(44,95,217,.18); }
+.p-prueba b { font-weight: 600; }
+.p-esp { border-top-color: var(--azul); }
+.p-esp .p-nom, .p-esp .p-prueba b { color: var(--azul-o); }
+.p-dem { border-top-color: var(--teal); }
+.p-dem .p-nom, .p-dem .p-prueba b { color: var(--teal-o); }
+.p-con { border-top-color: var(--ambar); }
+.p-con .p-nom, .p-con .p-prueba b { color: var(--ambar-o); }
+
+.ventaja {
+  font-family: var(--texto); font-size: 1.1875rem; line-height: 1.55;
+  color: var(--tinta); margin: 0 auto 1rem; max-width: 54ch;
+}
+
+.no-somos {
+  font-family: var(--sans); font-size: 0.8125rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ambar-o);
+  margin: 0 0 0.75rem;
+}
+
+.ya-ocurre {
+  font-family: var(--display); font-size: clamp(1.375rem, 2.8vw, 1.875rem);
+  line-height: 1.25; color: var(--tinta); margin: 0 auto 1.75rem;
+  max-width: 30ch; text-wrap: balance;
+}
+
+.intel-linea {
+  font-size: 1rem; line-height: 1.6; color: var(--suave);
+  margin: 0 auto 2.25rem; max-width: 56ch;
+}
+
+.cifras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+          padding: 2rem 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
+          margin: 0 0 2.25rem; }
+.cifras div { text-align: center; }
+.cifras .n { font-family: var(--display); font-size: 2.375rem; line-height: 1;
+             color: var(--azul-o); margin: 0 0 0.4rem; font-variant-numeric: tabular-nums; }
+.cifras .l { font-size: 0.8125rem; line-height: 1.4; color: var(--tenue); margin: 0; }
+
+.cierre-pos { font-family: var(--display); font-size: 1.25rem; line-height: 1.3;
+              color: var(--teal-o); margin: 0 0 0.4rem; text-wrap: balance; }
+.cierre-lema { font-family: var(--sans); font-size: 0.8125rem; font-weight: 600;
+               letter-spacing: 0.14em; text-transform: uppercase; color: var(--tenue);
+               margin: 0.35rem 0 0; }
+
+.cierre-ev { font-family: var(--sans); font-size: 0.8125rem; font-weight: 600;
+             letter-spacing: 0.14em; text-transform: uppercase; color: var(--tenue); margin: 0; }
+
+@media (max-width: 52rem) {
+  .cab-doble { grid-template-columns: 1fr; gap: 1.25rem; }
+  .pilares3 { grid-template-columns: 1fr; gap: 1.75rem; }
+  .cifras { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; }
+}
+
+/* --- VISTA DE AGENDA: intelligence first, then filters, then notes --- */
+.ag-cab { padding: 0 0 2rem; margin: 0 0 2.5rem; border-bottom: 3px solid; }
+.ag-cab .ag-et { margin: 0 0 0.75rem; }
+.ag-cab h1 { font-family: var(--display); font-size: clamp(2.25rem, 5.5vw, 3.25rem);
+             line-height: 1.08; margin: 0 0 0.5rem; letter-spacing: -0.02em; }
+.ag-cab .ag-glosa { font-size: 1.0625rem; color: var(--suave); margin: 0; }
+.ag-cab.p-esp { border-color: var(--azul); } .ag-cab.p-esp h1, .ag-cab.p-esp .ag-et { color: var(--azul-o); }
+.ag-cab.p-dem { border-color: var(--teal); } .ag-cab.p-dem h1, .ag-cab.p-dem .ag-et { color: var(--teal-o); }
+.ag-cab.p-con { border-color: var(--ambar); } .ag-cab.p-con h1, .ag-cab.p-con .ag-et { color: var(--ambar-o); }
+
+.ag-intel { background: var(--papel-alt, rgba(0,0,0,.02)); border-left: 3px solid var(--teal);
+            background: rgba(35,176,152,0.07); padding: 2rem 2.25rem; margin: 0 0 2.5rem; }
+.ag-intel > .label { color: var(--teal-o); margin: 0 0 0.875rem; }
+.ag-intel h2 { font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2;
+               margin: 0 0 1.125rem; max-width: 28ch; text-wrap: balance; }
+.ag-intel p { font-size: 1.0625rem; line-height: 1.75; color: var(--suave); margin: 0 0 1rem; max-width: 52rem; }
+.ag-intel b { color: var(--tinta); font-weight: 700; }
+.ag-intel .dato { border-top: 1px solid rgba(35,176,152,.25); margin: 1.5rem 0 0;
+                  padding-top: 1.125rem; font-size: 0.9375rem; color: var(--tenue); }
+
+/* standard news filters */
+.filtros { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+           padding: 1.125rem 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
+           margin: 0 0 1.25rem; }
+.filtros input, .filtros select {
+  font: inherit; font-family: var(--sans); font-size: 0.875rem;
+  color: var(--tinta); background: var(--papel);
+  border: 1px solid var(--linea); border-radius: 4px; padding: 0.5rem 0.75rem;
+}
+.filtros input { flex: 1 1 16rem; min-width: 12rem; }
+.filtros input:focus, .filtros select:focus { border-color: var(--azul); outline: none; }
+
+.f-cuenta { font-family: var(--sans); font-size: 0.75rem; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--tenue); margin: 0 0 2rem; }
+.f-vacio { font-family: var(--texto); font-size: 1.0625rem; color: var(--tenue); margin: 2rem 0; }
+
+.notas-lista { display: grid; gap: 2rem; }
+.nota-item { padding-bottom: 2rem; border-bottom: 1px solid var(--linea); }
+.nota-item:last-child { border-bottom: none; }
+.nota-item h3 { font-family: var(--display); font-size: 1.5rem; line-height: 1.25;
+                margin: 0 0 0.5rem; max-width: 34ch; text-wrap: balance; }
+.nota-item p { font-size: 1rem; line-height: 1.65; color: var(--suave); margin: 0 0 0.625rem; max-width: 52rem; }
+.nota-item .firma .pais { color: var(--tenue); }
+
+/* clickable agendas in the programme list */
+/* The three agendas are the entry points to their own pages, so they
+   have to read as links, not as a list. */
+.agendas li { transition: border-color .3s ease; }
+.agendas li a { text-decoration: none; display: block; }
+.agendas li a:hover b { text-decoration: underline; text-underline-offset: 4px; }
+
+.ver-todas {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-top: 0.75rem;
+}
+.agendas .ag-i .ver-todas { color: var(--azul-o); }
+.agendas .ag-d .ver-todas { color: var(--teal-o); }
+.agendas .ag-c .ver-todas { color: var(--ambar-o); }
+.agendas li a:hover .ver-todas { text-decoration: underline; text-underline-offset: 3px; }
+
+/* --- DOS RUTAS. Slides 5, 6 and 13: the reader must be able to place
+   themselves immediately — "estoy transformando" or "habilito". Teal is
+   always the buyer, amber is always the partner. -------------------- */
+.dos-rutas { border-top: 1px solid var(--linea-f); padding: 2.75rem 0 0; margin: 0 0 3rem; }
+.dos-rutas > .label { color: var(--tenue); margin: 0 0 0.875rem; }
+.rutas-h { font-family: var(--display); font-size: clamp(1.75rem, 3.5vw, 2.375rem);
+           line-height: 1.18; margin: 0 0 0.75rem; max-width: 30ch; text-wrap: balance; }
+.rutas-sub { font-size: 1.0625rem; line-height: 1.65; color: var(--suave); margin: 0 0 2.5rem; max-width: 62ch; }
+
+.rutas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+/* Columns are equal height, so making each a flex column and pushing the
+   button group down with auto margin lands both CTAs on the same line
+   regardless of how much copy sits above them. */
+.ruta { padding-top: 1.25rem; border-top: 3px solid;
+        display: flex; flex-direction: column; }
+.r-comprador { border-top-color: var(--teal); }
+.r-partner   { border-top-color: var(--ambar); }
+
+.r-quien { font-family: var(--sans); font-size: 0.6875rem; font-weight: 600;
+           letter-spacing: 0.14em; text-transform: uppercase; margin: 0 0 0.75rem; }
+.r-comprador .r-quien { color: var(--teal-o); }
+.r-partner   .r-quien { color: var(--ambar-o); }
+
+.r-titulo { font-family: var(--display); font-size: 1.625rem; line-height: 1.2;
+            color: var(--tinta); margin: 0 0 0.75rem; }
+.r-intro { font-size: 1rem; line-height: 1.65; color: var(--suave); margin: 0 0 1.5rem; }
+
+.r-pasos { margin: 0 0 1.75rem; }
+.r-pasos div { padding: 0.75rem 0; border-top: 1px solid var(--linea); }
+.r-pasos dt { font-family: var(--sans); font-size: 0.75rem; font-weight: 600;
+              letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 0.3rem; }
+.r-comprador .r-pasos dt { color: var(--teal-o); }
+.r-partner   .r-pasos dt { color: var(--ambar-o); }
+.r-pasos dd { font-size: 0.9375rem; line-height: 1.55; color: var(--suave); margin: 0; }
+
+.r-boton { display: inline-block; font-family: var(--sans); font-size: 0.9375rem;
+           font-weight: 600; color: #fff; padding: 0.875rem 1.5rem; text-decoration: none;
+           margin-top: auto; align-self: flex-start; }
+.r-comprador .r-boton { background: var(--teal-o); }
+.r-partner   .r-boton { background: var(--ambar-o); }
+
+.r-nota { font-family: var(--sans); font-size: 0.75rem; line-height: 1.6;
+          color: var(--tenue); margin: 1rem 0 0; }
+
+@media (max-width: 46rem) { .rutas-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+/* --- el evento: dates, place, what happens there ---------------------- */
+.evento { border-top: 1px solid var(--linea-f); padding: 2.75rem 0 0; margin: 0 0 3rem; }
+.evento > .label { color: var(--ambar-o); margin: 0 0 0.875rem; }
+.evento h2 { font-family: var(--display); font-size: clamp(1.75rem, 3.5vw, 2.375rem);
+             line-height: 1.15; margin: 0 0 0.75rem; max-width: 26ch; text-wrap: balance; }
+.evento .lema-ev { font-family: var(--texto); font-size: 1.1875rem; font-style: italic;
+                   color: var(--suave); margin: 0 0 2rem; }
+.datos-ev { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+            padding: 1.75rem 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+.datos-ev dt { margin: 0 0 0.4rem; }
+.datos-ev dd { font-family: var(--texto); font-size: 1.0625rem; color: var(--tinta); margin: 0; }
+
+@media (max-width: 46rem) {
+  .pilares, .cifras, .datos-ev { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; }
+}
+
+/* --- secciones -------------------------------------------------------- */
+.agenda { margin: 0 0 5.5rem; }
+.agenda.oculta { display: none; }
+
+.rotulo {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin: 0 0 2.75rem;
+}
+
+.rotulo h2 {
+  font-family: var(--sans);
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  margin: 0; white-space: nowrap;
+}
+
+.rotulo .regla { flex: 1; height: 1px; }
+.rotulo .glosa { font-family: var(--sans); font-size: 0.75rem; letter-spacing: 0.04em; color: var(--tenue); white-space: nowrap; }
+
+.agenda.infra   .rotulo h2 { color: var(--azul-o); }
+.agenda.infra   .rotulo .regla { background: var(--azul); }
+.agenda.digital .rotulo h2 { color: var(--teal-o); }
+.agenda.digital .rotulo .regla { background: var(--teal); }
+.agenda.clinica .rotulo h2 { color: var(--ambar-o); }
+.agenda.clinica .rotulo .regla { background: var(--ambar); }
+
+
+/* --- nota principal: tratamiento de artículo -------------------------- */
+.principal { margin: 0 0 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--linea); }
+
+/* ONE label register. Every small-caps line on the page uses this:
+   bylines, section heads, editor note, house ad, "la nota de la semana".
+   Only the colour varies. Do not add a second small-caps style. */
+.label, .firma, .rotulo h2, .editor .et, .casa .et, .publicacion {
+  text-wrap: nowrap;
+  font-family: var(--sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tenue);
+  margin: 0;
+}
+
+.firma { margin: 0 0 0.75rem; }
+
+.la-nota { color: var(--teal-o); margin: 0 0 1.25rem; }
+
+.destacada { padding-bottom: 4rem; margin-bottom: 4.5rem; border-bottom: 1px solid var(--linea-f); }
+.destacada .principal { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+
+.principal h3 { text-wrap: balance;
+  font-family: var(--display);
+  font-size: clamp(1.875rem, 4vw, 2.75rem);
+  line-height: 1.12;
+  color: var(--tinta);
+  margin: 0 0 0.875rem;
+  max-width: 28ch;
+}
+
+.principal .bajada {
+  font-family: var(--texto);
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--suave);
+  margin: 0 0 1.5rem;
+  max-width: 44rem;
+}
+
+.principal .cuerpo { font-size: 1.0625rem; line-height: 1.8; text-wrap: pretty; margin: 0 0 1rem; max-width: 46rem; }
+
+.principal .cuerpo::first-letter {
+  float: left;
+  font-family: var(--display);
+  font-size: 3.75rem;
+  line-height: 0.86;
+  padding: 0.06em 0.09em 0 0;
+  color: var(--azul-o);
+}
+
+.pie-nota { font-family: var(--sans); font-size: 0.75rem; color: var(--tenue); margin: 0; }
+.pie-nota a { color: var(--azul); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--linea); }
+
+
+/* --- notas breves: dos columnas separadas por filete ------------------ */
+.breves { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 3.5rem; }
+
+.breve { padding-left: 0; }
+.breves .breve + .breve { border-left: 1px solid var(--linea); padding-left: 3.25rem; }
+
+.breve h4 { text-wrap: balance;
+  font-family: var(--display);
+  font-size: 1.375rem;
+  line-height: 1.2;
+  color: var(--tinta);
+  margin: 0 0 0.625rem;
+}
+
+.breve p { font-size: 1rem; line-height: 1.7; text-wrap: pretty; color: var(--suave); margin: 0 0 0.75rem; }
+
+
+/* --- nota del editor -------------------------------------------------- */
+.editor {
+  border-top: 1px solid var(--linea);
+  border-bottom: 1px solid var(--linea);
+  padding: 2.25rem 0;
+  margin: 0 0 4.5rem;
+  text-align: center;
+}
+
+.editor .et {
+  font-family: var(--sans);
+  font-size: 0.6875rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--tenue); margin: 0 0 0.625rem;
+}
+
+.editor p { font-family: var(--texto); font-style: italic; font-size: 1.1875rem; line-height: 1.6; color: var(--suave); margin: 0 auto; max-width: 54rem; }
+.editor b { font-style: normal; color: var(--tinta); }
+
+
+/* --- anuncio de la casa ----------------------------------------------- */
+.casa {
+  border-top: 1px solid var(--ambar);
+  border-bottom: 1px solid var(--linea);
+  padding: 3rem 0;
+  text-align: center;
+  margin: 0 0 3.5rem;
+}
+
+.casa .et {
+  font-family: var(--sans);
+  font-size: 0.6875rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ambar-o); margin: 0 0 1rem;
+}
+
+.casa h3 { font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; color: var(--tinta); margin: 0 auto 0.875rem; max-width: 32ch; }
+.casa p { font-size: 1rem; line-height: 1.65; color: var(--suave); margin: 0 auto 1.75rem; max-width: 50rem; }
+
+.boton {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.9375rem; font-weight: 600;
+  color: #fff; background: var(--ambar-o);
+  padding: 0.875rem 1.75rem;
+  text-decoration: none;
+}
+
+.casa .nota { font-family: var(--sans); font-size: 0.75rem; line-height: 1.7; color: var(--tenue); margin: 1.25rem 0 0; }
+
+/* the three seller verbs from the deck */
+.pasos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+         margin: 0 auto 2.25rem; max-width: 52rem; text-align: left; }
+.pasos b { display: block; font-family: var(--display); font-size: 1.125rem; font-weight: 400;
+           color: var(--ambar-o); margin: 0 0 0.35rem; }
+.pasos span { font-size: 0.875rem; line-height: 1.55; color: var(--suave); }
+@media (max-width: 46rem) { .pasos { grid-template-columns: 1fr; gap: 1.25rem; } }
+
+
+/* --- colofón ---------------------------------------------------------- */
+.colofon { border-top: 3px solid var(--tinta); padding: 2rem 0 3.5rem; text-align: center; }
+.colofon .lema { font-family: var(--display); font-size: 1.25rem; color: var(--azul-o); margin: 0 0 0.75rem; }
+.colofon p { font-family: var(--sans); font-size: 0.8125rem; color: var(--tenue); margin: 0 0 0.35rem; }
+.colofon a { color: var(--azul); }
+
+@media (max-width: 46rem) {
+  .marco { padding: 0 1.25rem; }
+  .breves .breve + .breve { border-left: none; padding-left: 0; border-top: 1px solid var(--linea); padding-top: 2rem; }
+  .rotulo .glosa { display: none; }
+  .casa { padding: 1.75rem 1.25rem; }
+}
+
+/* =====================================================================
+   NOTA — the article page.
+   Same tokens, same single .label register. The page adds exactly two
+   new components: the ficha (structured record) and the lectura
+   (HospavIA's read). Everything else reuses the radar's styles.
+   ===================================================================== */
+.volver { display: inline-block; margin: 2rem 0 2.5rem; text-decoration: none; }
+.volver .label { color: var(--suave); }
+
+.nota-cab { border-bottom: 1px solid var(--linea); padding-bottom: 2rem; margin-bottom: 2.5rem; }
+.nota-cab .agenda-et { color: var(--teal-o); margin: 0 0 1.25rem; }
+
+.nota-cab h1 { text-wrap: balance;
+  font-family: var(--display);
+  font-size: clamp(2.125rem, 5.5vw, 3.25rem);
+  line-height: 1.1;
+  margin: 0 0 1rem;
+  max-width: 34ch;
+}
+
+.nota-cab .bajada {
+  font-family: var(--texto);
+  font-style: italic;
+  font-size: 1.3125rem;
+  line-height: 1.5;
+  color: var(--suave);
+  margin: 0 0 1.5rem;
+  max-width: 44rem;
+}
+
+.nota-cuerpo { max-width: 46rem; }
+.nota-cuerpo p { font-size: 1.0625rem; line-height: 1.8; text-wrap: pretty; margin: 0 0 1.25rem; }
+.nota-cuerpo p:first-of-type::first-letter {
+  float: left; font-family: var(--display); font-size: 4.25rem;
+  line-height: 0.82; padding: 0.1em 0.1em 0 0; color: var(--teal-o);
+}
+
+/* the structured record — what the pipeline actually captured */
+.ficha { border-top: 1px solid var(--linea-f); border-bottom: 1px solid var(--linea);
+         padding: 1.75rem 0; margin: 0 0 3rem; }
+.ficha dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+            gap: 1.25rem; margin: 0; }
+.ficha dt { margin: 0 0 0.3rem; }
+.ficha dd { font-family: var(--texto); font-size: 1rem; color: var(--tinta); margin: 0; }
+.ficha dd a { color: var(--azul); text-decoration: none; border-bottom: 1px solid var(--linea-f); }
+
+/* HospavIA's read — carries the event connection in prose. */
+/* The green box. Filled panel with a teal spine — do not un-box it. */
+.lectura { background: rgba(35,176,152,0.07); border-left: 3px solid var(--teal);
+           padding: 2rem 2.25rem; margin: 0 0 4rem; }
+.lectura .label { color: var(--teal-o); margin: 0 0 1.125rem; }
+.lectura p { font-size: 1.0625rem; line-height: 1.7; color: var(--suave); margin: 0 0 1rem; max-width: 46rem; }
+.lectura p:last-child { margin-bottom: 0; }
+.lectura b { color: var(--tinta); font-weight: 700; }
+
+.relacionadas { border-top: 1px solid var(--linea-f); padding-top: 2rem; margin: 0 0 3rem; }
+.relacionadas > .label { margin: 0 0 1.75rem; }
+.rel-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 2.5rem; }
+.rel a { text-decoration: none; display: block; }
+.rel h3 { font-family: var(--display); font-size: 1.1875rem; line-height: 1.25; margin: 0.5rem 0 0.375rem; }
+.rel p { font-size: 0.9375rem; line-height: 1.55; color: var(--suave); margin: 0; }
+.rel:hover h3 { color: var(--azul-o); }
+
+.vista { display: none; }
+.vista.activa { display: block; }
+
+/* --- site bar: real navigation between real pages -------------------- */
+.barra-sitio { border-bottom: 1px solid var(--linea-f); padding: 0.875rem 0; margin-bottom: 0; }
+.barra-sitio .marco { display: flex; align-items: baseline; justify-content: space-between;
+                      gap: 2rem; flex-wrap: wrap; }
+.sitio-logo { font-family: var(--display); font-size: 1.25rem; color: var(--azul-o);
+              text-decoration: none; letter-spacing: -0.01em; }
+.sitio-logo .ia { color: var(--teal-o); }
+.sitio-r { font-family: var(--sans); font-size: 0.625rem; font-weight: 600;
+           letter-spacing: 0.24em; color: var(--teal-o); }
+.sitio-nav { display: flex; gap: 1.75rem; flex-wrap: wrap; }
+.sitio-nav a { font-family: var(--sans); font-size: 0.8125rem; font-weight: 600;
+               color: var(--suave); text-decoration: none; padding-bottom: 3px;
+               border-bottom: 2px solid transparent; }
+.sitio-nav a:hover { color: var(--tinta); }
+.sitio-nav a.aqui { color: var(--azul-o); border-bottom-color: var(--azul); }
+.vista, .vista.activa { display: block; }
+
+/* ===================================================================
+   AGENDA LAYOUT — Washington Post Opinions structure.
+   Hero left + "más notas" rail right, then the editorial band full
+   width (their "The Post's View"), then a three-column grid, then a
+   numbered most-recent list. LAYOUT ONLY — every colour, font and
+   token below is the existing one. No new palette.
+   =================================================================== */
+.wp-hero { display: grid; grid-template-columns: 1fr 20rem; gap: 2.75rem;
+           padding: 0 0 2rem; margin: 0 0 2rem; border-bottom: 1px solid var(--linea-f); }
+.wp-hero > .rail { border-left: 1px solid var(--linea); padding-left: 2.75rem; }
+
+.wp-lead .firma { margin: 0 0 .5rem; }
+.wp-lead h2 { font-family: var(--display); font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+              line-height: 1.14; letter-spacing: -.018em; margin: 0 0 .75rem; }
+.wp-lead .sum { font-size: 1.0625rem; line-height: 1.65; color: var(--suave);
+                margin: 0 0 .75rem; max-width: 42rem; }
+
+.rail h4 { font-family: var(--sans); font-size: .6875rem; font-weight: 600;
+           letter-spacing: .14em; text-transform: uppercase; color: var(--tenue);
+           margin: 0 0 1.125rem; padding-bottom: .625rem; border-bottom: 2px solid var(--linea-f); }
+.rail ul { list-style: none; margin: 0; padding: 0; }
+.rail li { padding: 1.125rem 0; border-bottom: 1px solid var(--linea); }
+.rail li:last-child { border-bottom: none; padding-bottom: 0; }
+.rail a { text-decoration: none; display: block; }
+.rail .t { font-family: var(--display); font-size: 1.1875rem; line-height: 1.32;
+           color: var(--tinta); margin: 0 0 .45rem; display: block; }
+.rail a:hover .t { text-decoration: underline; text-underline-offset: 3px; }
+.rail .b { font-family: var(--sans); font-size: .6875rem; letter-spacing: .06em;
+           text-transform: uppercase; color: var(--tenue); display: block; }
+.rail .b b { color: var(--suave); font-weight: 600; letter-spacing: .04em; }
+
+/* three-column grid of stories, WaPo's lower well */
+.wp-rejilla { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.25rem; }
+.wp-rejilla .nota-item { padding: 0 0 1.5rem; border-bottom: 1px solid var(--linea); }
+.wp-rejilla .nota-item h3 { font-size: 1.1875rem; line-height: 1.28; margin: 0 0 .4rem; max-width: none; }
+.wp-rejilla .nota-item p { font-size: .9375rem; line-height: 1.55; margin: 0 0 .5rem; max-width: none; }
+
+/* numbered most-recent, WaPo's "Most Read" */
+.wp-mas { padding-top: 2.5rem; margin-top: 2.5rem; border-top: 1px solid var(--linea-f); }
+.wp-mas h4 { font-family: var(--sans); font-size: .6875rem; font-weight: 600;
+             letter-spacing: .14em; text-transform: uppercase; color: var(--tenue);
+             margin: 0 0 1.25rem; padding-bottom: .625rem; border-bottom: 2px solid var(--linea-f); }
+.wp-mas ol { list-style: none; counter-reset: r; margin: 0; padding: 0;
+             display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 3.5rem; }
+.wp-mas li { counter-increment: r; display: grid; grid-template-columns: 2.25rem 1fr;
+             gap: 1rem; padding: 1.125rem 0; border-bottom: 1px solid var(--linea); }
+.wp-mas li::before { content: counter(r); font-family: var(--display); font-size: 1.75rem;
+                     color: var(--tenue); opacity: .5; line-height: 1; }
+.wp-mas .t { font-family: var(--display); font-size: 1.1875rem; line-height: 1.32;
+             color: var(--tinta); margin: 0 0 .45rem; }
+.wp-mas .b { font-family: var(--sans); font-size: .6875rem; letter-spacing: .06em;
+             text-transform: uppercase; color: var(--tenue); display: block; }
+.wp-mas .b b { color: var(--suave); font-weight: 600; letter-spacing: .04em; }
+
+@media (max-width: 62rem) {
+  .wp-hero { grid-template-columns: 1fr; gap: 2rem; }
+  .wp-hero > .rail { border-left: none; padding-left: 0;
+                     border-top: 1px solid var(--linea-f); padding-top: 1.5rem; }
+  .wp-rejilla { grid-template-columns: repeat(2, 1fr); }
+  .wp-mas ol { grid-template-columns: 1fr; }
+}
+@media (max-width: 40rem) { .wp-rejilla { grid-template-columns: 1fr; } }
+
+/* Intelligence takes the lead position in the hero — it is our piece,
+   so it carries the biggest headline on the page. Colours unchanged. */
+.wp-hero .ag-intel { margin: 0; }
+.wp-hero .ag-intel h2 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.14;
+                        letter-spacing: -.018em; max-width: 26ch; }
+.wp-hero .ag-intel p { font-size: 1.0625rem; }
+
+/* Charts inside the Intelligence block. Inline SVG, no dependencies,
+   every fill an existing token. Deliberately unboxed: a takeaway line,
+   a hairline, the chart, a source note — no second frame inside the
+   teal panel, which is what made it read as a block dropped in. */
+.grafico { width: 100%; height: auto; display: block; margin: 0; overflow: visible; }
+.grafico .cl { fill: var(--tenue); font-family: var(--sans); font-size: 11px; }
+.grafico .cv { font-family: var(--sans); font-size: 12px; font-weight: 600; }
+
+.caja-grafico { margin-top: 1.75rem; }
+.caja-grafico .g-t {
+  font-family: var(--texto);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--tinta);
+  margin: 0 0 .875rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid rgba(35,176,152,.3);
+  max-width: 46ch;
+}
+.caja-grafico .g-p {
+  font-family: var(--sans); font-size: .625rem; line-height: 1.55;
+  letter-spacing: .01em; color: var(--tenue); margin: 1rem 0 0;
+}
+
+
+/* Portada Intelligence: a condensed read, smaller than the agenda-page
+   version, since the full analysis lives on each agenda. */
+#intelligence { padding: 1.5rem 1.75rem; margin: 0 0 3rem; }
+#intelligence h2 { font-size: clamp(1.25rem, 2.2vw, 1.5rem); line-height: 1.25;
+                   margin: 0 0 .75rem; max-width: 38ch; }
+#intelligence p { font-size: .9375rem; line-height: 1.65; margin: 0; max-width: 62rem; }
+#intelligence .intel-links { font-family: var(--sans); font-size: .8125rem;
+                             color: var(--tenue); margin: .875rem 0 0; }
+#intelligence .intel-links a { color: var(--teal-o); font-weight: 600;
+                               text-decoration: none; border-bottom: 1px solid var(--linea); }
+</style>
+
+<style>.vista { display:none } .vista.activa { display:block }</style>
+</head>
+<body>
+
+<div class="barra-sitio">
+  <div class="marco">
+    <a class="sitio-logo" href="#portada" data-ver="portada">Hospav<span class="ia">IA</span> <span class="sitio-r">RADAR</span></a>
+    <nav class="sitio-nav">
+      <a href="#portada" data-ver="portada">Portada</a>
+      <a href="#infra" data-ver="infra">Infraestructura</a>
+      <a href="#digital" data-ver="digital">Digitalización</a>
+      <a href="#clinica" data-ver="clinica">Inteligencia clínica</a>
+    </nav>
+  </div>
+</div>
+
+<div class="vista activa" id="v-portada">
+<div class="marco">
+
+  <header class="cabecera">
+    <div class="linea-emisor">
+      <span>Agosto 2026</span>
+      <span>Panamá 2027 · Powered by FernFutures</span>
+    </div>
+
+    <h1 class="nombre">Hospav<span class="ia">IA</span></h1>
+    <p class="publicacion">RADAR</p>
+    <p class="subnombre">El evento especializado en la transformación hospitalaria de América Latina</p>
+    <div class="regla-doble"></div>
+
+    <nav class="departamentos">
+      <a class="dep activo" data-ag="todas" href="#portada" data-ver="portada">Todas</a>
+      <a class="dep" data-ag="infra" href="#infra" data-ver="infra">Infraestructura</a>
+      <a class="dep" data-ag="digital" href="#digital" data-ver="digital">Digitalización</a>
+      <a class="dep" data-ag="clinica" href="#clinica" data-ver="clinica">Inteligencia clínica</a>
+    </nav>
+  </header>
+
+  <section class="posicion">
+
+    <div class="pos-hook">
+      <h2 class="reclamo">La transformación hospitalaria de América Latina ya está ocurriendo.</h2>
+      <p class="reclamo-sub">HospavIA entiende la transformación real de hospitales, clínicas y sistemas de salud, y conecta a quienes la están llevando a cabo con los socios estratégicos capaces de hacerla posible.</p>
+    </div>
+
+    <div class="pos-dif">
+      <p class="no-somos">No somos un evento genérico más</p>
+      <h3 class="dif-h">El evento especializado en la transformación hospitalaria de América Latina.</h3>
+      <p class="dif-cierre">La especialización LATAM es la ventaja: es el evento que entiende la realidad de la región. HospavIA Intelligence analiza dónde se está moviendo la demanda real del sector salud en LATAM.</p>
+
+      <div class="pilares3">
+        <div class="pilar3 p-esp">
+          <p class="p-nom">Especializado</p>
+          <p class="p-sub">LATAM como foco y territorio propio.</p>
+          <p class="p-prueba"><b>9 mercados</b> conectados por un mismo propósito</p>
+        </div>
+        <div class="pilar3 p-dem">
+          <p class="p-nom">Basado en demanda</p>
+          <p class="p-sub">2,000+ prioridades de inversión como señal de mercado.</p>
+          <p class="p-prueba"><b>2,083 iniciativas</b> analizadas por HospavIA Intelligence</p>
+        </div>
+        <div class="pilar3 p-con">
+          <p class="p-nom">Conector</p>
+          <p class="p-sub">Organizaciones que transforman + socios que habilitan.</p>
+          <p class="p-prueba"><b>259 organizaciones</b> líderes que impulsan la transformación</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="programa">
+      <p class="agendas-intro">El programa</p>
+      <p class="tema">De la infraestructura a la inteligencia</p>
+      <p class="agendas-cierre">Se organiza en tres agendas de transformación. De la infraestructura a la inteligencia no es reemplazo: es evolución: digital convierte y acelera la capacidad instalada en inteligencia operativa y clínica.</p>
+
+      <ul class="agendas">
+        <li class="ag-i"><a href="#infra" data-ver="infra"><b>Infraestructura</b><span>Capacidad instalada, diagnóstico, quirófano y cuidados intensivos</span><span class="ver-todas">Ver todas las notas &rarr;</span></a></li>
+        <li class="ag-d"><a href="#digital" data-ver="digital"><b>Digitalización</b><span>Datos, inteligencia artificial, interoperabilidad y workflow</span><span class="ver-todas">Ver todas las notas &rarr;</span></a></li>
+        <li class="ag-c"><a href="#clinica" data-ver="clinica"><b>Inteligencia clínica</b><span>Robótica, oncología y alta complejidad</span><span class="ver-todas">Ver todas las notas &rarr;</span></a></li>
+      </ul>
+    </div>
+
+    <div class="pos-cierre">
+      <p class="cierre-pos">Donde la transformación encuentra a quienes la hacen posible.</p>
+      <p class="cierre-ev">HospavIA. Panamá. 15 de junio de 2027</p>
+      <p class="cierre-lema">Inteligencia. Conexión. Transformación.</p>
+    </div>
+
+  </section>
+
+
+  <main id="radar">
+
+  <div class="ag-intel" id="intelligence">
+    <p class="label">FernFutures Intelligence</p>
+    <h2>La región está comprando capacidad y eligiendo proveedor al mismo tiempo</h2>
+    <p>Se construye la mayor ola de obra hospitalaria de la década mientras el criterio de compra se mueve: interoperabilidad obligatoria en Colombia y tres plataformas robóticas estrenadas sin da Vinci. El proveedor que entra ahora fija el estándar.</p>
+    <p class="intel-links">Análisis completo en
+      <a href="#infra" data-ver="infra">Infraestructura</a>,
+      <a href="#digital" data-ver="digital">Digitalización</a> e
+      <a href="#clinica" data-ver="clinica">Inteligencia clínica</a>.</p>
+  </div>
+
+    <section class="agenda clinica destacada">
+      <p class="label la-nota">La nota del mes</p>
+      <article class="principal">
+        <p class="firma">Inteligencia clínica · SS Innovations · Colombia</p>
+        <h3><a href="#nota" data-ver="nota" style="text-decoration:none">SSI Mantra 3 abre la cirugía cardíaca robótica en Colombia</a></h3>
+        <p class="bajada">La primera coronaria totalmente endoscópica del país no se hizo con da Vinci.</p>
+        <p class="cuerpo">El Hospital Internacional de Colombia estrenó su programa con la primera coronaria totalmente endoscópica del país. Cardíaca es la plaza más difícil de ganar para un entrante. En un solo mes se estrenaron tres plataformas distintas en tres mercados distintos y ninguna es da Vinci. Intuitive respondió convocando a más de 200 líderes en São Paulo. Lo relevante no es la robótica: es que la barrera de entrada cayó.</p>
+        <p class="pie-nota"><a href="https://www.intramed.net/content/colombia-inaugura-una-nueva-era-en-cirugia-cardiaca-con-la--primera-cirugia-cardiovascular-robotica-realizada-con-el--si">Intramed</a> · 6 ago 2026</p>
+      </article>
+    </section>
+
+    <section class="agenda infra">
+      <div class="rotulo">
+        <h2><a href="#infra" data-ver="infra">Infraestructura</a></h2>
+        <span class="regla"></span>
+        <span class="glosa">Capacidad instalada, diagnóstico, quirófano y cuidados intensivos</span>
+      </div>
+      <div class="breves">
+        <div class="breve">
+          <p class="firma">Mozarc Medical · Costa Rica</p>
+          <h4>Arranca operaciones en Cartago con catéteres de acceso renal</h4>
+          <p>El acondicionamiento empezó en enero y la producción estaba prevista para este mes. Costa Rica sigue ganando plantas en categorías de alto valor.</p>
+          <p class="pie-nota"><a href="https://revistasumma.com/costa-rica-atrae-nueva-empresa-de-dispositivos-medicos-mozarc-medical-anuncia-planta-en-cartago/">Revista Summa</a> · sep 2026</p>
+        </div>
+        <div class="breve">
+          <p class="firma">Ministerio de Salud · Guatemala</p>
+          <h4>Q35.6 millones en equipamiento clínico para 49 instalaciones</h4>
+          <p>Quirófanos, cardiología, laboratorio, banco de sangre, imagen y cuidados intensivos, repartidos entre el Roosevelt, el San Juan de Dios y hospitales departamentales.</p>
+          <p class="pie-nota"><a href="https://dca.gob.gt/noticias-guatemala-diario-centro-america/cartera-de-salud-ha-invertido-q35-6-millones-en-equipamiento-clinico/">Diario de Centro América</a> · 12 ago 2026</p>
+        </div>
+        <div class="breve">
+          <p class="firma">Gobierno de México · México</p>
+          <h4>152 proyectos hospitalarios y 181 mil millones de pesos al 2030</h4>
+          <p>Cincuenta hospitales nuevos, 47 ampliaciones y 55 sustituciones. El sistema pasa de 96,966 a 106,105 camas. El equipamiento de la mayoría no se ha licitado.</p>
+          <p class="pie-nota"><a href="https://www.gob.mx/presidencia/prensa/con-una-inversion-de-181-mil-mdp-al-2030-se-realizaran-152-proyectos-hospitalarios-se-llegara-a-106-mil-105-camas-nuevas-presidenta">Presidencia de la República</a> · 10 ago 2026</p>
+        </div>
+      </div>
+    </section>
+    <section class="agenda digital">
+      <div class="rotulo">
+        <h2><a href="#digital" data-ver="digital">Digitalización</a></h2>
+        <span class="regla"></span>
+        <span class="glosa">Datos, inteligencia artificial, interoperabilidad y workflow</span>
+      </div>
+      <div class="breves">
+        <div class="breve">
+          <p class="firma">Forum Salud Digital · Chile</p>
+          <h4>La ciberseguridad hospitalaria entra en la agenda de infraestructura crítica</h4>
+          <p>Fichas electrónicas, dispositivos conectados y diagnóstico asistido dejan la red asistencial más expuesta a medida que se integra.</p>
+          <p class="pie-nota"><a href="https://portalredsalud.cl/2026/08/28/hospitales-hiperconectados-el-nuevo-desafio-de-proteger-la-salud-en-la-era-de-la-ia/">Portal Red Salud</a> · 28 ago 2026</p>
+        </div>
+        <div class="breve">
+          <p class="firma">COFEPRIS · México</p>
+          <h4>Publica aclaraciones sobre DIGIPRiS</h4>
+          <p>Afecta directamente el trámite de registro sanitario de dispositivos. Todo proveedor que venda en México pasa por aquí antes de facturar.</p>
+          <p class="pie-nota"><a href="https://enfarma.lat/index.php/noticias/13200-genentech-anuncia-la-expansion-de-su-planta-de-fabricacion-en-hillsboro-oregon">enFarma</a> · 26 ago 2026</p>
+        </div>
+        <div class="breve">
+          <p class="firma">Agesic · Uruguay</p>
+          <h4>Mantiene la historia clínica electrónica interoperable en todo el Sistema Nacional Integrado de Salud</h4>
+          <p>Interoperable entre instituciones y en todo el territorio. Es la referencia regional más antigua en funcionamiento continuo.</p>
+          <p class="pie-nota"><a href="https://www.caf.com/es/blog/como-puede-la-inteligencia-artificial-mejorar-la-salud-de-los-latinoamericanos/">CAF</a> · vigente ago 2026</p>
+        </div>
+      </div>
+    </section>
+    <section class="agenda clinica">
+      <div class="rotulo">
+        <h2><a href="#clinica" data-ver="clinica">Inteligencia clínica</a></h2>
+        <span class="regla"></span>
+        <span class="glosa">Robótica, oncología y alta complejidad</span>
+      </div>
+      <div class="breves">
+        <div class="breve">
+          <p class="firma">CMR Surgical · El Salvador</p>
+          <h4>Versius entra al sistema público con la primera cirugía robótica del país</h4>
+          <p>En el nuevo Hospital Nacional Rosales. Versius y el Hugo de Medtronic abren el segmento de hospitales medianos que el da Vinci nunca priorizó.</p>
+          <p class="pie-nota"><a href="https://www.infobae.com/el-salvador/2026/08/27/el-salvador-suma-cirugia-robotica-con-el-sistema-versius-en-el-nuevo-hospital-nacional-rosales/">Infobae</a> · 27 ago 2026</p>
+        </div>
+        <div class="breve">
+          <p class="firma">Intuitive Surgical y Strattner · Brasil</p>
+          <h4>Da Vinci 360 LATAM reúne a 200 líderes en São Paulo</h4>
+          <p>Brasil concentra cerca de 200 plataformas instaladas, la mitad de la actividad regional. El encuentro es la respuesta del líder a la entrada de rivales.</p>
+          <p class="pie-nota"><a href="https://www.informesdeexpertos.com/informes/mercado-de-procedimientos-quirurgicos-roboticos-en-america-latina">Informes de Expertos</a> · 13 ago 2026</p>
+        </div>
+        <div class="breve">
+          <p class="firma">Toumai · Argentina</p>
+          <h4>Plataforma multipuerto de cuatro brazos en el Hospital Universitario Austral</h4>
+          <p>El contrato incluye capacitación de los equipos quirúrgicos, no solo el equipo. El plan cubre ginecología, torácica y oncología compleja.</p>
+          <p class="pie-nota"><a href="https://urgente24.com/omni/cirugia-robotica-la-revolucion-el-hospital-universitario-austral-n629946">Urgente24</a> · 4 ago 2026</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="dos-rutas" id="rutas">
+    <p class="label">Dos rutas</p>
+    <h2 class="rutas-h">HospavIA conecta a quienes transforman la salud con quienes la hacen posible.</h2>
+    <p class="rutas-sub">Es conexión con base en demanda real, prioridades concretas y soluciones alineadas. No un networking genérico más.</p>
+    <div class="rutas-grid">
+      <div class="ruta r-comprador">
+        <p class="r-quien">Compradores · instituciones</p>
+        <p class="r-titulo">Estoy transformando mi organización</p>
+        <p class="r-intro">Conecta con los líderes que están transformando la salud en LATAM y con los aliados que pueden acelerar tu transformación.</p>
+        <dl class="r-pasos">
+          <div><dt>Conecta</dt><dd>Cómo los líderes y organizaciones comparables de LATAM se están transformando.</dd></div>
+          <div><dt>Compara</dt><dd>Prioridades, modelos, iniciativas y soluciones frente a tus objetivos.</dd></div>
+          <div><dt>Transforma</dt><dd>Fortalece tu ecosistema de socios estratégicos para ejecutar mejor.</dd></div>
+        </dl>
+        <a class="r-boton" href="#">Solicita participar como Institución Invitada</a>
+        <p class="r-nota">Programa de Líderes de Transformación. Para hospitales, clínicas, sistemas de salud, farmacias y organizaciones que están definiendo sus prioridades de cambio y transformación.</p>
+      </div>
+      <div class="ruta r-partner">
+        <p class="r-quien">Vendedores · partners</p>
+        <p class="r-titulo">Habilito la transformación</p>
+        <p class="r-intro">Posiciónate y haz negocio con quienes están transformando la salud en LATAM. Las organizaciones de salud ya están seleccionando las tecnologías y partners que harán posible su transformación.</p>
+        <dl class="r-pasos">
+          <div><dt>Identifica demanda</dt><dd>Inteligencia de Demanda powered by FernFutures: quién invierte en soluciones como las tuyas.</dd></div>
+          <div><dt>Posiciónate</dt><dd>Frente a hospitales, clínicas y sistemas de salud que ya están transformando sus capacidades.</dd></div>
+          <div><dt>Haz negocio</dt><dd>Conecta tu portafolio con prioridades reales y conversaciones de alto valor.</dd></div>
+        </dl>
+        <a class="r-boton" href="#">Registra tu espacio como expositor</a>
+        <p class="r-nota">No te quedes fuera de la conversación.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="evento">
+    <p class="label">El evento</p>
+    <h2>HospavIA · Panamá 2027</h2>
+    <p class="lema-ev">Donde la transformación encuentra a quienes la hacen posible.</p>
+    <dl class="datos-ev">
+      <div><dt class="label">Sede</dt><dd>Ciudad de Panamá</dd></div>
+      <div><dt class="label">Fecha</dt><dd>15 de junio de 2027</dd></div>
+      <div><dt class="label">Formato</dt><dd>Tres días, tres agendas</dd></div>
+      <div><dt class="label">Alcance</dt><dd>Nueve mercados de LATAM</dd></div>
+    </dl>
+  </section>
+
+  <footer class="colofon">
+    <p class="lema">Donde la transformación encuentra a quienes la hacen posible</p>
+    <p>Inteligencia. Conexión. Transformación.</p>
+    <p>HospavIA · Panamá 2027 · <a href="https://hospavia.com">hospavia.com</a></p>
+    <p>Powered by FernFutures</p>
+  </footer>
+</div>
+</div>
+
+<div class="vista" id="v-infra">
+<div class="marco">
+
+  <header class="ag-cab p-esp">
+    <p class="label ag-et">Agenda</p>
+    <h1>Infraestructura</h1>
+    <p class="ag-glosa">Capacidad instalada, diagnóstico, quirófano y cuidados intensivos</p>
+  </header>
+
+  <div class="wp-hero">
+    <div class="ag-intel">
+      <p class="label">FernFutures Intelligence</p>
+      <h2>El equipamiento va detrás de la obra</h2>
+      <p>México comprometió <b>181 mil millones de pesos y 152 proyectos hospitalarios al 2030</b>: 50 hospitales nuevos, 47 ampliaciones y 55 sustituciones. Guatemala ejecutó Q35.6 millones en equipamiento clínico para 49 instalaciones en el mismo mes.</p>
+      <p>El patrón no es el gasto: es la secuencia. La obra se anuncia con presupuesto y calendario, y el equipamiento se licita después. Entre esos dos momentos hay una ventana en la que la especificación todavía se puede influir.</p>
+      <div class="caja-grafico">
+        <p class="g-t">México concentra cuatro de cada cinco proyectos hospitalarios en marcha</p>
+        <svg viewBox="0 0 600 96" role="img" class="grafico"><text x="0" y="11" class="cl">México</text><rect x="112" y="2" width="384" height="11" fill="var(--azul)" opacity="1"/><text x="505" y="11" class="cv" fill="var(--azul)">152</text><text x="0" y="37" class="cl">Chile</text><rect x="112" y="28" width="91" height="11" fill="var(--tenue)" opacity=".28"/><text x="212" y="37" class="cv" fill="var(--tenue)">36</text><text x="0" y="63" class="cl">Perú</text><rect x="112" y="54" width="40" height="11" fill="var(--tenue)" opacity=".28"/><text x="161" y="63" class="cv" fill="var(--tenue)">16</text><text x="0" y="89" class="cl">Paraguay</text><rect x="112" y="80" width="3" height="11" fill="var(--tenue)" opacity=".28"/><text x="124" y="89" class="cv" fill="var(--tenue)">1</text></svg>
+        <p class="g-p">Proyectos comprometidos. Presidencia de México, Minsal Chile, PRONIS Perú, MSPBS Paraguay.</p>
+      </div>
+    </div>
+    <div class="rail">
+      <h4>Más en Infraestructura</h4>
+      <ul>
+        <li><a href="#" style="text-decoration:none"><span class="t">Arranca operaciones en Cartago con catéteres de acceso renal</span></a><span class="b"><b>Mozarc Medical</b> · Costa Rica · sep 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">Q35.6 millones en equipamiento clínico para 49 instalaciones</span></a><span class="b"><b>Ministerio de Salud</b> · Guatemala · 12 ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">152 proyectos hospitalarios y 181 mil millones de pesos al 2030</span></a><span class="b"><b>Gobierno de México</b> · México · 10 ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">Trujillo y Piura se ejecutan por convenio Gobierno a Gobierno con 650 millones de dólares</span></a><span class="b"><b>PRONIS · Reino Unido</b> · Perú · vigente ago 2026</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <input type="search" class="f-buscar" placeholder="Buscar empresa o palabra clave" aria-label="Buscar">
+    <select class="f-pais" aria-label="Mercado">
+      <option value="">Todos los mercados</option>
+      <option value="Chile">Chile</option>
+      <option value="Costa Rica">Costa Rica</option>
+      <option value="Guatemala">Guatemala</option>
+      <option value="México">México</option>
+      <option value="Paraguay">Paraguay</option>
+      <option value="Perú">Perú</option>
+      <option value="Regional">Regional</option>
+    </select>
+    <select class="f-fecha" aria-label="Periodo">
+      <option value="">Cualquier fecha</option>
+      <option value="30">Últimos 30 días</option>
+      <option value="90">Últimos 3 meses</option>
+      <option value="180">Últimos 6 meses</option>
+    </select>
+    <select class="f-orden" aria-label="Orden">
+      <option value="desc">Más recientes primero</option>
+      <option value="asc">Más antiguas primero</option>
+    </select>
+  </div>
+
+  <p class="f-cuenta"></p>
+
+  <div class="wp-rejilla notas-lista">
+      <article class="nota-item" data-pais="Costa Rica" data-fecha="2026-09-01">
+        <p class="firma">Mozarc Medical · <span class="pais">Costa Rica</span></p>
+        <h3>Arranca operaciones en Cartago con catéteres de acceso renal</h3>
+        <p>El acondicionamiento empezó en enero y la producción estaba prevista para este mes. Costa Rica sigue ganando plantas en categorías de alto valor.</p>
+        <p class="pie-nota"><a href="https://revistasumma.com/costa-rica-atrae-nueva-empresa-de-dispositivos-medicos-mozarc-medical-anuncia-planta-en-cartago/">Revista Summa</a> · sep 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Guatemala" data-fecha="2026-08-12">
+        <p class="firma">Ministerio de Salud · <span class="pais">Guatemala</span></p>
+        <h3>Q35.6 millones en equipamiento clínico para 49 instalaciones</h3>
+        <p>Quirófanos, cardiología, laboratorio, banco de sangre, imagen y cuidados intensivos, repartidos entre el Roosevelt, el San Juan de Dios y hospitales departamentales.</p>
+        <p class="pie-nota"><a href="https://dca.gob.gt/noticias-guatemala-diario-centro-america/cartera-de-salud-ha-invertido-q35-6-millones-en-equipamiento-clinico/">Diario de Centro América</a> · 12 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="México" data-fecha="2026-08-10">
+        <p class="firma">Gobierno de México · <span class="pais">México</span></p>
+        <h3>152 proyectos hospitalarios y 181 mil millones de pesos al 2030</h3>
+        <p>Cincuenta hospitales nuevos, 47 ampliaciones y 55 sustituciones. El sistema pasa de 96,966 a 106,105 camas. El equipamiento de la mayoría no se ha licitado.</p>
+        <p class="pie-nota"><a href="https://www.gob.mx/presidencia/prensa/con-una-inversion-de-181-mil-mdp-al-2030-se-realizaran-152-proyectos-hospitalarios-se-llegara-a-106-mil-105-camas-nuevas-presidenta">Presidencia de la República</a> · 10 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Perú" data-fecha="2026-08-01">
+        <p class="firma">PRONIS · Reino Unido · <span class="pais">Perú</span></p>
+        <h3>Trujillo y Piura se ejecutan por convenio Gobierno a Gobierno con 650 millones de dólares</h3>
+        <p>Cerca de 600 camas por hospital y una previsión superior a 7,600 equipos. Consulta externa, emergencia, centro quirúrgico, imagen y farmacia.</p>
+        <p class="pie-nota"><a href="https://diariomedico.pe/reino-unido-ejecutara-hospitales-de-trujillo-y-piura-con-una-inversion-de-us-650-millones-de-dolares/">Diario Médico</a> · vigente ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Chile" data-fecha="2026-08-01">
+        <p class="firma">Ministerio de Salud · <span class="pais">Chile</span></p>
+        <h3>36 hospitales en construcción hacia 2030, con 277 pabellones y 419 sillones de diálisis</h3>
+        <p>8,608 camas entre obra nueva y renovación, más 2,246 box de atención. Diez entregas antes del cierre del actual gobierno y el resto entre 2026 y 2030.</p>
+        <p class="pie-nota"><a href="https://www.minsal.cl/inversiones">Ministerio de Salud de Chile</a> · vigente ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Paraguay" data-fecha="2026-07-27">
+        <p class="firma">Ministerio de Salud Pública · <span class="pais">Paraguay</span></p>
+        <h3>Reequipa el Hospital Nacional de Itauguá y proyecta una obra de 52,000 m²</h3>
+        <p>Cuatro ventiladores, cuatro aspiradores, carro de paro, desfibrilador, dos electrobisturíes y un radiológico digital. La nueva construcción contempla 1,039 camas, 160 de terapia intensiva y 30 quirófanos.</p>
+        <p class="pie-nota"><a href="https://www.ip.gov.py/ip/2026/07/27/hospital-nacional-de-itaugua-avanza-en-su-modernizacion-con-inversiones-en-equipamiento-infraestructura-y-personal/">Agencia IP</a> · 27 jul 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Regional" data-fecha="2026-07-14">
+        <p class="firma">Global Health Intelligence · <span class="pais">Regional</span></p>
+        <h3>Hospirank 2026 contabiliza 22,452 hospitales en América Latina</h3>
+        <p>Brasil encabeza el conteo por tamaño de población. El estudio ordena los centros por acreditación internacional y equipamiento clínico.</p>
+        <p class="pie-nota"><a href="https://www.saludiario.com/panorama-de-los-hospitales-en-latinoamerica-en-2026-en-que-paises-hay-mas-y-menos-unidades/">Saludiario</a> · 14 jul 2026</p>
+      </article>
+  </div>
+
+  <p class="f-vacio" hidden>Ninguna nota coincide con los filtros.</p>
+
+  <div class="wp-mas">
+    <h4>Lo más reciente en Infraestructura</h4>
+    <ol>
+        <li><div><p class="t">Arranca operaciones en Cartago con catéteres de acceso renal</p><span class="b"><b>Mozarc Medical</b> · Costa Rica · sep 2026</span></div></li>
+        <li><div><p class="t">Q35.6 millones en equipamiento clínico para 49 instalaciones</p><span class="b"><b>Ministerio de Salud</b> · Guatemala · 12 ago 2026</span></div></li>
+        <li><div><p class="t">152 proyectos hospitalarios y 181 mil millones de pesos al 2030</p><span class="b"><b>Gobierno de México</b> · México · 10 ago 2026</span></div></li>
+        <li><div><p class="t">Trujillo y Piura se ejecutan por convenio Gobierno a Gobierno con 650 millones de dólares</p><span class="b"><b>PRONIS · Reino Unido</b> · Perú · vigente ago 2026</span></div></li>
+        <li><div><p class="t">36 hospitales en construcción hacia 2030, con 277 pabellones y 419 sillones de diálisis</p><span class="b"><b>Ministerio de Salud</b> · Chile · vigente ago 2026</span></div></li>
+        <li><div><p class="t">Reequipa el Hospital Nacional de Itauguá y proyecta una obra de 52,000 m²</p><span class="b"><b>Ministerio de Salud Pública</b> · Paraguay · 27 jul 2026</span></div></li>
+        <li><div><p class="t">Hospirank 2026 contabiliza 22,452 hospitales en América Latina</p><span class="b"><b>Global Health Intelligence</b> · Regional · 14 jul 2026</span></div></li>
+    </ol>
+  </div>
+
+  <footer class="colofon">
+    <p class="lema">Donde la transformación encuentra a quienes la hacen posible</p>
+    <p>Inteligencia. Conexión. Transformación.</p>
+    <p>HospavIA · Panamá 2027 · <a href="https://hospavia.com">hospavia.com</a></p>
+    <p>Powered by FernFutures</p>
+  </footer>
+</div>
+</div>
+
+<div class="vista" id="v-digital">
+<div class="marco">
+
+  <header class="ag-cab p-dem">
+    <p class="label ag-et">Agenda</p>
+    <h1>Digitalización</h1>
+    <p class="ag-glosa">Datos, inteligencia artificial, interoperabilidad y workflow</p>
+  </header>
+
+  <div class="wp-hero">
+    <div class="ag-intel">
+      <p class="label">FernFutures Intelligence</p>
+      <h2>La interoperabilidad dejó de ser opcional</h2>
+      <p>Colombia integra ya <b>6.3 millones de pacientes</b> bajo la Resolución 1888 de 2025: todo prestador del REPS debe transmitir el Resumen Digital de Atención en HL7 FHIR R4. No es un piloto, es una obligación estructural.</p>
+      <p>La consecuencia comercial es directa: cualquier dispositivo conectado que se venda en Colombia hereda ese requisito. Lo que era una casilla técnica pasa a ser criterio de compra, y quien no lo resuelva queda fuera del pliego.</p>
+      <div class="caja-grafico">
+        <p class="g-t">La salud digital crece más de tres veces más rápido que el mercado de dispositivos</p>
+        <svg viewBox="0 0 600 44" role="img" class="grafico"><text x="0" y="11" class="cl">Salud digital</text><rect x="112" y="2" width="384" height="11" fill="var(--teal)" opacity="1"/><text x="505" y="11" class="cv" fill="var(--teal)">20%+</text><text x="0" y="37" class="cl">Dispositivos médicos</text><rect x="112" y="28" width="111" height="11" fill="var(--tenue)" opacity=".28"/><text x="232" y="37" class="cv" fill="var(--tenue)">~5.8%</text></svg>
+        <p class="g-p">CAGR estimado. 227 de las 2,083 iniciativas registradas por HospavIA Intelligence son digitales.</p>
+      </div>
+    </div>
+    <div class="rail">
+      <h4>Más en Digitalización</h4>
+      <ul>
+        <li><a href="#" style="text-decoration:none"><span class="t">La ciberseguridad hospitalaria entra en la agenda de infraestructura crítica</span></a><span class="b"><b>Forum Salud Digital</b> · Chile · 28 ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">Publica aclaraciones sobre DIGIPRiS</span></a><span class="b"><b>COFEPRIS</b> · México · 26 ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">Mantiene la historia clínica electrónica interoperable en todo el Sistema Nacional Integrado de Salud</span></a><span class="b"><b>Agesic</b> · Uruguay · vigente ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">Advierte que sin automatización e interoperabilidad se compromete la rentabilidad y la seguridad del paciente</span></a><span class="b"><b>Asociación Colombiana de Hospitales y Clínicas</b> · Colombia · 29 jul 2026</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <input type="search" class="f-buscar" placeholder="Buscar empresa o palabra clave" aria-label="Buscar">
+    <select class="f-pais" aria-label="Mercado">
+      <option value="">Todos los mercados</option>
+      <option value="Chile">Chile</option>
+      <option value="Colombia">Colombia</option>
+      <option value="México">México</option>
+      <option value="Uruguay">Uruguay</option>
+    </select>
+    <select class="f-fecha" aria-label="Periodo">
+      <option value="">Cualquier fecha</option>
+      <option value="30">Últimos 30 días</option>
+      <option value="90">Últimos 3 meses</option>
+      <option value="180">Últimos 6 meses</option>
+    </select>
+    <select class="f-orden" aria-label="Orden">
+      <option value="desc">Más recientes primero</option>
+      <option value="asc">Más antiguas primero</option>
+    </select>
+  </div>
+
+  <p class="f-cuenta"></p>
+
+  <div class="wp-rejilla notas-lista">
+      <article class="nota-item" data-pais="Chile" data-fecha="2026-08-28">
+        <p class="firma">Forum Salud Digital · <span class="pais">Chile</span></p>
+        <h3>La ciberseguridad hospitalaria entra en la agenda de infraestructura crítica</h3>
+        <p>Fichas electrónicas, dispositivos conectados y diagnóstico asistido dejan la red asistencial más expuesta a medida que se integra.</p>
+        <p class="pie-nota"><a href="https://portalredsalud.cl/2026/08/28/hospitales-hiperconectados-el-nuevo-desafio-de-proteger-la-salud-en-la-era-de-la-ia/">Portal Red Salud</a> · 28 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="México" data-fecha="2026-08-26">
+        <p class="firma">COFEPRIS · <span class="pais">México</span></p>
+        <h3>Publica aclaraciones sobre DIGIPRiS</h3>
+        <p>Afecta directamente el trámite de registro sanitario de dispositivos. Todo proveedor que venda en México pasa por aquí antes de facturar.</p>
+        <p class="pie-nota"><a href="https://enfarma.lat/index.php/noticias/13200-genentech-anuncia-la-expansion-de-su-planta-de-fabricacion-en-hillsboro-oregon">enFarma</a> · 26 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Uruguay" data-fecha="2026-08-01">
+        <p class="firma">Agesic · <span class="pais">Uruguay</span></p>
+        <h3>Mantiene la historia clínica electrónica interoperable en todo el Sistema Nacional Integrado de Salud</h3>
+        <p>Interoperable entre instituciones y en todo el territorio. Es la referencia regional más antigua en funcionamiento continuo.</p>
+        <p class="pie-nota"><a href="https://www.caf.com/es/blog/como-puede-la-inteligencia-artificial-mejorar-la-salud-de-los-latinoamericanos/">CAF</a> · vigente ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Colombia" data-fecha="2026-07-29">
+        <p class="firma">Asociación Colombiana de Hospitales y Clínicas · <span class="pais">Colombia</span></p>
+        <h3>Advierte que sin automatización e interoperabilidad se compromete la rentabilidad y la seguridad del paciente</h3>
+        <p>Cerca del 58% de los médicos colombianos ya usaban plataformas de telemedicina en 2025. El valor se desplaza de la consulta remota a la monitorización continua integrada a la historia clínica.</p>
+        <p class="pie-nota"><a href="https://www.noticiassuper.com/2026/07/29/inteligencia-artificial-telemedicina-y-cirugia-robotica-asi-se-esta-transformando-la-salud-en-la-region/">Noticias Súper</a> · 29 jul 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Colombia" data-fecha="2026-07-29">
+        <p class="firma">Meditech · <span class="pais">Colombia</span></p>
+        <h3>Dedica un simposio completo a gobernanza y regulación de la IA clínica</h3>
+        <p>Qué estándares éticos deben regir el uso clínico y qué regulación necesita Colombia para que la adopción sea segura y equitativa.</p>
+        <p class="pie-nota"><a href="https://www.noticiassuper.com/2026/07/29/inteligencia-artificial-telemedicina-y-cirugia-robotica-asi-se-esta-transformando-la-salud-en-la-region/">Noticias Súper</a> · 29 jul 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Colombia" data-fecha="2026-07-28">
+        <p class="firma">Ministerio de Salud · <span class="pais">Colombia</span></p>
+        <h3>La historia clínica interoperable ya integra a 6.3 millones de pacientes</h3>
+        <p>El modelo IHCE opera desde abril bajo la Resolución 1888 de 2025. Todo prestador del REPS debe transmitir en HL7 FHIR R4.</p>
+        <p class="pie-nota"><a href="https://consultorsalud.com/colombia-interoperabilidad-historia-clinica/">Consultorsalud</a> · 28 jul 2026</p>
+      </article>
+  </div>
+
+  <p class="f-vacio" hidden>Ninguna nota coincide con los filtros.</p>
+
+  <div class="wp-mas">
+    <h4>Lo más reciente en Digitalización</h4>
+    <ol>
+        <li><div><p class="t">La ciberseguridad hospitalaria entra en la agenda de infraestructura crítica</p><span class="b"><b>Forum Salud Digital</b> · Chile · 28 ago 2026</span></div></li>
+        <li><div><p class="t">Publica aclaraciones sobre DIGIPRiS</p><span class="b"><b>COFEPRIS</b> · México · 26 ago 2026</span></div></li>
+        <li><div><p class="t">Mantiene la historia clínica electrónica interoperable en todo el Sistema Nacional Integrado de Salud</p><span class="b"><b>Agesic</b> · Uruguay · vigente ago 2026</span></div></li>
+        <li><div><p class="t">Advierte que sin automatización e interoperabilidad se compromete la rentabilidad y la seguridad del paciente</p><span class="b"><b>Asociación Colombiana de Hospitales y Clínicas</b> · Colombia · 29 jul 2026</span></div></li>
+        <li><div><p class="t">Dedica un simposio completo a gobernanza y regulación de la IA clínica</p><span class="b"><b>Meditech</b> · Colombia · 29 jul 2026</span></div></li>
+        <li><div><p class="t">La historia clínica interoperable ya integra a 6.3 millones de pacientes</p><span class="b"><b>Ministerio de Salud</b> · Colombia · 28 jul 2026</span></div></li>
+    </ol>
+  </div>
+
+  <footer class="colofon">
+    <p class="lema">Donde la transformación encuentra a quienes la hacen posible</p>
+    <p>Inteligencia. Conexión. Transformación.</p>
+    <p>HospavIA · Panamá 2027 · <a href="https://hospavia.com">hospavia.com</a></p>
+    <p>Powered by FernFutures</p>
+  </footer>
+</div>
+</div>
+
+<div class="vista" id="v-clinica">
+<div class="marco">
+
+  <header class="ag-cab p-con">
+    <p class="label ag-et">Agenda</p>
+    <h1>Inteligencia clínica</h1>
+    <p class="ag-glosa">Robótica, oncología y alta complejidad</p>
+  </header>
+
+  <div class="wp-hero">
+    <div class="ag-intel">
+      <p class="label">FernFutures Intelligence</p>
+      <h2>El proveedor único dejó de serlo</h2>
+      <p>En un solo mes, <b>tres plataformas robóticas distintas se estrenaron en tres mercados distintos</b>: SSI Mantra en Colombia, Toumai en Argentina, Versius en El Salvador. Ninguna es da Vinci. Intuitive respondió convocando a más de 200 líderes en São Paulo.</p>
+      <p>Lo relevante no es la robótica: es que la barrera de entrada cayó. Que una plataforma sin historia regional se estrene en <b>cirugía cardíaca</b> —donde el comité clínico pesa más que el precio— indica que la decisión ya no se toma por defecto.</p>
+      <div class="caja-grafico">
+        <p class="g-t">En agosto, ninguno de los tres estrenos regionales fue da Vinci</p>
+        <svg viewBox="0 0 600 150" role="img" class="grafico">
+  <line x1="40" y1="118" x2="596" y2="118" stroke="var(--linea-f)" stroke-width=".75"/>
+  <text x="0" y="20" class="cl">100%</text>
+  <text x="20" y="121" class="cl">0%</text>
+  <polyline points="72,16 202,30 332,58 462,92 570,113" fill="none"
+            stroke="var(--tenue)" stroke-opacity=".45" stroke-width="1.5"/>
+  <polyline points="462,92 570,113" fill="none" stroke="var(--ambar)" stroke-width="2"/>
+  <circle cx="72"  cy="16"  r="2.5" fill="var(--tenue)" opacity=".45"/>
+  <circle cx="202" cy="30"  r="2.5" fill="var(--tenue)" opacity=".45"/>
+  <circle cx="332" cy="58"  r="2.5" fill="var(--tenue)" opacity=".45"/>
+  <circle cx="462" cy="92"  r="2.5" fill="var(--tenue)" opacity=".45"/>
+  <circle cx="570" cy="113" r="4"   fill="var(--ambar)"/>
+  <text x="536" y="105" class="cv" fill="var(--ambar)">0%</text>
+  <text x="58"  y="138" class="cl">2022</text>
+  <text x="188" y="138" class="cl">2023</text>
+  <text x="318" y="138" class="cl">2024</text>
+  <text x="448" y="138" class="cl">2025</text>
+  <text x="540" y="138" class="cl">ago 2026</text>
+</svg>
+        <p class="g-p">Serie ilustrativa; el dato verificado es agosto de 2026. Participación en estrenos de plataforma, LATAM.</p>
+      </div>
+    </div>
+    <div class="rail">
+      <h4>Más en Inteligencia clínica</h4>
+      <ul>
+        <li><a href="#" style="text-decoration:none"><span class="t">Versius entra al sistema público con la primera cirugía robótica del país</span></a><span class="b"><b>CMR Surgical</b> · El Salvador · 27 ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">Da Vinci 360 LATAM reúne a 200 líderes en São Paulo</span></a><span class="b"><b>Intuitive Surgical y Strattner</b> · Brasil · 13 ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">SSI Mantra 3 abre la cirugía cardíaca robótica en Colombia</span></a><span class="b"><b>SS Innovations</b> · Colombia · 6 ago 2026</span></li>
+        <li><a href="#" style="text-decoration:none"><span class="t">Plataforma multipuerto de cuatro brazos en el Hospital Universitario Austral</span></a><span class="b"><b>Toumai</b> · Argentina · 4 ago 2026</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <input type="search" class="f-buscar" placeholder="Buscar empresa o palabra clave" aria-label="Buscar">
+    <select class="f-pais" aria-label="Mercado">
+      <option value="">Todos los mercados</option>
+      <option value="Argentina">Argentina</option>
+      <option value="Brasil">Brasil</option>
+      <option value="Chile">Chile</option>
+      <option value="Colombia">Colombia</option>
+      <option value="El Salvador">El Salvador</option>
+      <option value="México">México</option>
+    </select>
+    <select class="f-fecha" aria-label="Periodo">
+      <option value="">Cualquier fecha</option>
+      <option value="30">Últimos 30 días</option>
+      <option value="90">Últimos 3 meses</option>
+      <option value="180">Últimos 6 meses</option>
+    </select>
+    <select class="f-orden" aria-label="Orden">
+      <option value="desc">Más recientes primero</option>
+      <option value="asc">Más antiguas primero</option>
+    </select>
+  </div>
+
+  <p class="f-cuenta"></p>
+
+  <div class="wp-rejilla notas-lista">
+      <article class="nota-item" data-pais="El Salvador" data-fecha="2026-08-27">
+        <p class="firma">CMR Surgical · <span class="pais">El Salvador</span></p>
+        <h3>Versius entra al sistema público con la primera cirugía robótica del país</h3>
+        <p>En el nuevo Hospital Nacional Rosales. Versius y el Hugo de Medtronic abren el segmento de hospitales medianos que el da Vinci nunca priorizó.</p>
+        <p class="pie-nota"><a href="https://www.infobae.com/el-salvador/2026/08/27/el-salvador-suma-cirugia-robotica-con-el-sistema-versius-en-el-nuevo-hospital-nacional-rosales/">Infobae</a> · 27 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Brasil" data-fecha="2026-08-13">
+        <p class="firma">Intuitive Surgical y Strattner · <span class="pais">Brasil</span></p>
+        <h3>Da Vinci 360 LATAM reúne a 200 líderes en São Paulo</h3>
+        <p>Brasil concentra cerca de 200 plataformas instaladas, la mitad de la actividad regional. El encuentro es la respuesta del líder a la entrada de rivales.</p>
+        <p class="pie-nota"><a href="https://www.informesdeexpertos.com/informes/mercado-de-procedimientos-quirurgicos-roboticos-en-america-latina">Informes de Expertos</a> · 13 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Colombia" data-fecha="2026-08-06">
+        <p class="firma">SS Innovations · <span class="pais">Colombia</span></p>
+        <h3>SSI Mantra 3 abre la cirugía cardíaca robótica en Colombia</h3>
+        <p>El Hospital Internacional de Colombia estrenó su programa con la primera coronaria totalmente endoscópica del país. Cardíaca es la plaza más difícil de ganar para un entrante.</p>
+        <p class="pie-nota"><a href="https://www.intramed.net/content/colombia-inaugura-una-nueva-era-en-cirugia-cardiaca-con-la--primera-cirugia-cardiovascular-robotica-realizada-con-el--si">Intramed</a> · 6 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Argentina" data-fecha="2026-08-04">
+        <p class="firma">Toumai · <span class="pais">Argentina</span></p>
+        <h3>Plataforma multipuerto de cuatro brazos en el Hospital Universitario Austral</h3>
+        <p>El contrato incluye capacitación de los equipos quirúrgicos, no solo el equipo. El plan cubre ginecología, torácica y oncología compleja.</p>
+        <p class="pie-nota"><a href="https://urgente24.com/omni/cirugia-robotica-la-revolucion-el-hospital-universitario-austral-n629946">Urgente24</a> · 4 ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="México" data-fecha="2026-08-01">
+        <p class="firma">IMSS · <span class="pais">México</span></p>
+        <h3>Prepara cinco programas de cirugía robótica en hospitales de alta especialidad</h3>
+        <p>La Raza, Siglo XXI, Occidente, Monterrey y Torreón, con ejecución prevista entre 2026 y 2027. Es la mayor compra pública del segmento en la región.</p>
+        <p class="pie-nota"><a href="https://www.saludiario.com/panorama-de-los-hospitales-en-latinoamerica-en-2026-en-que-paises-hay-mas-y-menos-unidades/">Saludiario</a> · vigente ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Chile" data-fecha="2026-08-01">
+        <p class="firma">Ministerio de Salud · <span class="pais">Chile</span></p>
+        <h3>Inicia obras del Centro Oncológico de Atacama y abre Hematología Intensiva en Concepción</h3>
+        <p>Dos hitos de alta complejidad fuera de Santiago, en una red que históricamente concentró la oncología en la capital.</p>
+        <p class="pie-nota"><a href="https://www.minsal.cl/inversiones">Ministerio de Salud de Chile</a> · vigente ago 2026</p>
+      </article>
+      <article class="nota-item" data-pais="Brasil" data-fecha="2026-07-27">
+        <p class="firma">Hospital Israelita Albert Einstein · <span class="pais">Brasil</span></p>
+        <h3>Exporta su modelo de gestión al hospital de referencia de Paraguay</h3>
+        <p>Acuerdo con el Ministerio de Salud Pública paraguayo para el Hospital Nacional de Itauguá. La alta complejidad brasileña empieza a venderse como servicio, no solo como destino.</p>
+        <p class="pie-nota"><a href="https://www.ip.gov.py/ip/2026/07/27/hospital-nacional-de-itaugua-avanza-en-su-modernizacion-con-inversiones-en-equipamiento-infraestructura-y-personal/">Agencia IP</a> · 27 jul 2026</p>
+      </article>
+  </div>
+
+  <p class="f-vacio" hidden>Ninguna nota coincide con los filtros.</p>
+
+  <div class="wp-mas">
+    <h4>Lo más reciente en Inteligencia clínica</h4>
+    <ol>
+        <li><div><p class="t">Versius entra al sistema público con la primera cirugía robótica del país</p><span class="b"><b>CMR Surgical</b> · El Salvador · 27 ago 2026</span></div></li>
+        <li><div><p class="t">Da Vinci 360 LATAM reúne a 200 líderes en São Paulo</p><span class="b"><b>Intuitive Surgical y Strattner</b> · Brasil · 13 ago 2026</span></div></li>
+        <li><div><p class="t">SSI Mantra 3 abre la cirugía cardíaca robótica en Colombia</p><span class="b"><b>SS Innovations</b> · Colombia · 6 ago 2026</span></div></li>
+        <li><div><p class="t">Plataforma multipuerto de cuatro brazos en el Hospital Universitario Austral</p><span class="b"><b>Toumai</b> · Argentina · 4 ago 2026</span></div></li>
+        <li><div><p class="t">Prepara cinco programas de cirugía robótica en hospitales de alta especialidad</p><span class="b"><b>IMSS</b> · México · vigente ago 2026</span></div></li>
+        <li><div><p class="t">Inicia obras del Centro Oncológico de Atacama y abre Hematología Intensiva en Concepción</p><span class="b"><b>Ministerio de Salud</b> · Chile · vigente ago 2026</span></div></li>
+        <li><div><p class="t">Exporta su modelo de gestión al hospital de referencia de Paraguay</p><span class="b"><b>Hospital Israelita Albert Einstein</b> · Brasil · 27 jul 2026</span></div></li>
+    </ol>
+  </div>
+
+  <footer class="colofon">
+    <p class="lema">Donde la transformación encuentra a quienes la hacen posible</p>
+    <p>Inteligencia. Conexión. Transformación.</p>
+    <p>HospavIA · Panamá 2027 · <a href="https://hospavia.com">hospavia.com</a></p>
+    <p>Powered by FernFutures</p>
+  </footer>
+</div>
+</div>
+
+<div class="vista" id="v-nota">
+<div class="marco">
+
+
+
+  <a class="volver" href="#portada" data-ver="portada"><span class="label">&larr; HospavIA Radar · Agosto 2026</span></a>
+
+  <article>
+
+    <header class="nota-cab">
+      <p class="label agenda-et" style="color:var(--ambar-o)">Inteligencia clínica</p>
+      <h1>SSI Mantra 3 abre la cirugía cardíaca robótica en Colombia</h1>
+      <p class="bajada">La primera coronaria totalmente endoscópica del país no se hizo con da Vinci.</p>
+      <p class="label">Colombia · Registrado el 6 de agosto de 2026</p>
+    </header>
+
+    <div class="ficha">
+      <dl>
+        <div><dt class="label">Proveedor</dt><dd>SS Innovations</dd></div>
+        <div><dt class="label">Plataforma</dt><dd>SSI Mantra 3</dd></div>
+        <div><dt class="label">Cliente</dt><dd>Hospital Internacional de Colombia</dd></div>
+        <div><dt class="label">Mercado</dt><dd>Colombia</dd></div>
+        <div><dt class="label">Agenda</dt><dd>Inteligencia clínica</dd></div>
+        <div><dt class="label">Fuente</dt><dd><a href="https://www.intramed.net/content/colombia-inaugura-una-nueva-era-en-cirugia-cardiaca-con-la--primera-cirugia-cardiovascular-robotica-realizada-con-el--si">Intramed</a></dd></div>
+      </dl>
+    </div>
+
+    <div class="nota-cuerpo">
+      <p>El Hospital Internacional de Colombia inició su programa de cirugía cardíaca robótica con la primera cirugía coronaria totalmente endoscópica del país, realizada con el sistema SSI Mantra 3.</p>
+      <p>El detalle relevante no es el procedimiento sino la especialidad. Cardíaca es la plaza más difícil de ganar para una plataforma entrante: el ciclo de compra es largo, el comité clínico pesa más que el precio y el incumbente lleva dos décadas de evidencia publicada. Que una plataforma sin historia regional se estrene ahí, y no en urología o ginecología, indica que el criterio de selección se movió.</p>
+      <p>Agosto cerró con tres estrenos de plataformas distintas en tres mercados distintos. Intuitive respondió reuniendo a más de 200 líderes de Brasil, Argentina y Chile en São Paulo. Brasil concentra cerca de 200 sistemas instalados, la mitad de la actividad regional, y es el noveno mercado mundial del segmento: es el territorio que el líder no puede permitirse ceder.</p>
+    </div>
+
+    <div class="lectura">
+      <p class="label">De esto se habla en HospavIA</p>
+      <p>La mesa redonda <b>Cómo se elige una plataforma robótica</b> aborda exactamente esta decisión: qué pesa en el comité clínico, cómo se financia el programa y qué pasa con el entrenamiento cuando el proveedor no es el incumbente. Agenda de Inteligencia clínica, día 2.</p>
+      <p>En la mesa se sientan directores médicos y jefes de cirugía de instituciones de los nueve mercados, incluidas tres que abrieron programa robótico en los últimos doce meses.</p>
+    </div>
+
+    <div class="relacionadas">
+      <p class="label">También en robótica este mes</p>
+      <div class="rel-lista">
+        <div class="rel"><a href="#portada" data-ver="portada">
+          <p class="label">CMR Surgical · El Salvador</p>
+          <h3>Versius entra al sistema público con la primera cirugía robótica del país</h3>
+          <p>En el nuevo Hospital Nacional Rosales.</p>
+        </a></div>
+        <div class="rel"><a href="#portada" data-ver="portada">
+          <p class="label">Toumai · Argentina</p>
+          <h3>Plataforma multipuerto de cuatro brazos en el Hospital Universitario Austral</h3>
+          <p>El contrato incluye capacitación de los equipos.</p>
+        </a></div>
+        <div class="rel"><a href="#portada" data-ver="portada">
+          <p class="label">Intuitive Surgical y Strattner · Brasil</p>
+          <h3>Da Vinci 360 LATAM reúne a 200 líderes en São Paulo</h3>
+          <p>La respuesta del líder a la entrada de rivales.</p>
+        </a></div>
+      </div>
+    </div>
+
+  </article>
+
+  <section class="evento">
+    <p class="label">El evento</p>
+    <h2>HospavIA · Panamá 2027</h2>
+    <p class="lema-ev">Donde la transformación encuentra a quienes la hacen posible.</p>
+
+    <dl class="datos-ev">
+      <div><dt class="label">Sede</dt><dd>Ciudad de Panamá</dd></div>
+      <div><dt class="label">Fecha</dt><dd>2027 · por confirmar</dd></div>
+      <div><dt class="label">Formato</dt><dd>Tres días, tres agendas</dd></div>
+      <div><dt class="label">Alcance</dt><dd>Nueve mercados de LATAM</dd></div>
+    </dl>
+  </section>
+
+  <section class="dos-rutas">
+    <p class="label">Dos rutas</p>
+    <h2 class="rutas-h">HospavIA conecta a quienes transforman la salud con quienes la hacen posible.</h2>
+    <p class="rutas-sub">Es conexión con base en demanda real, prioridades concretas y soluciones alineadas. No un networking genérico más.</p>
+
+    <div class="rutas-grid">
+
+      <div class="ruta r-comprador">
+        <p class="r-quien">Compradores · instituciones</p>
+        <p class="r-titulo">Estoy transformando mi organización</p>
+        <p class="r-intro">Conecta con los líderes que están transformando la salud en LATAM y con los aliados que pueden acelerar tu transformación.</p>
+
+        <dl class="r-pasos">
+          <div><dt>Conecta</dt><dd>Cómo los líderes y organizaciones comparables de LATAM se están transformando.</dd></div>
+          <div><dt>Compara</dt><dd>Prioridades, modelos, iniciativas y soluciones frente a tus objetivos.</dd></div>
+          <div><dt>Transforma</dt><dd>Fortalece tu ecosistema de socios estratégicos para ejecutar mejor.</dd></div>
+        </dl>
+
+        <a class="r-boton" href="#">Solicita participar como Institución Invitada</a>
+        <p class="r-nota">Programa de Líderes de Transformación. Para hospitales, clínicas, sistemas de salud, farmacias y organizaciones que están definiendo sus prioridades de cambio y transformación.</p>
+      </div>
+
+      <div class="ruta r-partner">
+        <p class="r-quien">Vendedores · partners</p>
+        <p class="r-titulo">Habilito la transformación</p>
+        <p class="r-intro">Posiciónate y haz negocio con quienes están transformando la salud en LATAM. Las organizaciones de salud ya están seleccionando las tecnologías y partners que harán posible su transformación.</p>
+
+        <dl class="r-pasos">
+          <div><dt>Identifica demanda</dt><dd>Inteligencia de Demanda powered by FernFutures: quién invierte en soluciones como las tuyas.</dd></div>
+          <div><dt>Posiciónate</dt><dd>Frente a hospitales, clínicas y sistemas de salud que ya están transformando sus capacidades.</dd></div>
+          <div><dt>Haz negocio</dt><dd>Conecta tu portafolio con prioridades reales y conversaciones de alto valor.</dd></div>
+        </dl>
+
+        <a class="r-boton" href="#">Registra tu espacio como expositor</a>
+        <p class="r-nota">No te quedes fuera de la conversación. Un evento especializado en América Latina para hacer negocio, aprender de la transformación y participar en el futuro de la salud de la región.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="colofon">
+    <p class="lema">Donde la transformación encuentra a quienes la hacen posible</p>
+    <p>Inteligencia. Conexión. Transformación.</p>
+    <p>HospavIA · Panamá 2027 · <a href="https://hospavia.com">hospavia.com</a></p>
+    <p>Powered by FernFutures</p>
+  </footer>
+
+
+
+
+  <footer class="colofon">
+    <p class="lema">Donde la transformación encuentra a quienes la hacen posible</p>
+    <p>Inteligencia. Conexión. Transformación.</p>
+    <p>HospavIA · Panamá 2027 · <a href="https://hospavia.com">hospavia.com</a></p>
+    <p>Powered by FernFutures</p>
+  </footer>
+</div>
+</div>
+
+<script>
+(function () {
+  var V=['portada','infra','digital','clinica','nota'];
+  function ver(v) {
+    if (V.indexOf(v)===-1) v='portada';
+    V.forEach(function(id){var e=document.getElementById('v-'+id); if(e) e.classList.toggle('activa',id===v);});
+    document.querySelectorAll('.sitio-nav a, .dep').forEach(function(a){
+      var t=a.getAttribute('data-ver');
+      a.classList.toggle('aqui', t===v);
+      if(a.classList.contains('dep')) a.classList.toggle('activo', t===v);
+    });
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('[data-ver]'):null;
+    if(!a) return; e.preventDefault(); ver(a.getAttribute('data-ver'));
+  });
+  ver('portada');
+  document.querySelectorAll('.filtros').forEach(function(b){
+    var r=b.closest('.vista'), lista=r.querySelector('.notas-lista');
+    if(!lista) return;
+    var items=Array.prototype.slice.call(r.querySelectorAll('.wp-rejilla .nota-item')),
+        cuenta=r.querySelector('.f-cuenta'), vacio=r.querySelector('.f-vacio');
+    function ap(){
+      var q=b.querySelector('.f-buscar').value.trim().toLowerCase(),p=b.querySelector('.f-pais').value,
+          d=b.querySelector('.f-fecha').value,o=b.querySelector('.f-orden').value,
+          corte=d?Date.now()-d*86400000:null,n=0;
+      items.forEach(function(el){
+        var ok=(!q||el.textContent.toLowerCase().indexOf(q)!==-1)&&(!p||el.dataset.pais===p)&&(!corte||new Date(el.dataset.fecha).getTime()>=corte);
+        el.hidden=!ok; if(ok) n++;
+      });
+      items.slice().sort(function(x,y){var t=new Date(x.dataset.fecha)-new Date(y.dataset.fecha); return o==='asc'?t:-t;}).forEach(function(el){lista.appendChild(el);});
+      cuenta.textContent=n+(n===1?' nota':' notas'); vacio.hidden=n>0;
+    }
+    b.addEventListener('input',ap); b.addEventListener('change',ap); ap();
+  });
+})();
+</script>
+</body>
+</html>
